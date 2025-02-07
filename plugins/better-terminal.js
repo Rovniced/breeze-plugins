@@ -121,26 +121,21 @@ shell.menu_controller.add_menu_listener((ctx) => {
     const fv = ctx.context.folder_view
     const current_path = fv.current_path
     const selectedPaths = fv.selected_files
+    const items = ctx.menu.get_items();
 
     if (read_config_key('terminal.disableOriginal')) {
-        const items = ctx.menu.get_items();
-        const ori = "在终端中打开";
-        const ori_menu = items.find((v) => v.data().name === ori);
+        const ori_menu = items.find((v) => v.data().name === "在终端中打开");
         if (ori_menu) {
             ori_menu.remove();
         }
     }
 
+
     if (selectedPaths.length === 0 || selectedPaths.length === 1) { // 空白位置或选中一个文件
-        const items = ctx.menu.get_items();
-        let targetIndex = items.findIndex((v) => v.data().name === '复制') + 1;
-        if (targetIndex === 0) {
-            targetIndex = items.findIndex((v) => v.data().name === '新建') + 1;
-        }
+        let targetIndex = items.findIndex((v) => v.data().name === '刷新') + 1 || items.findIndex((v) => v.data().name === '剪切') - 1;
         if (targetIndex === 0) {
             return;
         }
-
 
         shell.println(current_path);
         const runCommand = async (command) => {
